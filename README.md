@@ -1,2 +1,3 @@
 # isyankar-bet
-slot games, casino
+slot games, casino demo
+
