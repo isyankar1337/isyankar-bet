@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İsyankar Bet - Eğlence Amaçlı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background-color: #0b0e14; color: #fff; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0e14; }
+        ::-webkit-scrollbar-thumb { background: #2a303c; border-radius: 5px; }
+
+        /* ÜST BAR */
+        .topbar { background: #11151f; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; border-bottom: 1px solid #1f2633; z-index: 100; }
+        .logo { font-size: 26px; font-weight: 900; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; font-style: italic; }
+        .logo span { color: #ffcc00; }
+        .user-panel { display: flex; align-items: center; gap: 15px; }
+        .balance-box { background: #1a202c; padding: 10px 20px; border-radius: 8px; border: 1px solid #2d3748; display: flex; align-items: center; gap: 10px; }
+        .balance-amount { font-weight: 800; color: #ffcc00; font-size: 18px; }
+        .btn-deposit { background: #00c853; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-deposit:hover { background: #00e676; transform: translateY(-2px); }
+
+        /* ANA YERLEŞİM */
+        .main-layout { display: flex; flex: 1; }
+        .sidebar { width: 250px; background: #11151f; border-right: 1px solid #1f2633; padding: 20px 0; }
+        .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px 30px; color: #a0aec0; font-weight: 600; cursor: pointer; transition: 0.2s; text-decoration: none; }
+        .menu-item:hover, .menu-item.active { background: #1a202c; color: #fff; border-left: 4px solid #ffcc00; }
+
+        /* İÇERİK VE OYUN VİTRİNİ */
+        .content { flex: 1; padding: 30px; display: flex; flex-direction: column; gap: 30px; background: radial-gradient(circle at top left, #141b26, #0b0e14); }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        
+        .game-card { background: #1a202c; border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid #2d3748; position: relative; }
+        .game-card:hover { transform: translateY(-5px); border-color: #ffcc00; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        /* Oyun Kapak Resimleri */
+        .game-cover { height: 180px; background-size: cover; background-position: center; position: relative; display: flex; align-items: flex-end; padding: 15px; }
+        .game-cover::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 60%); }
+        
+        /* Oyun İsimleri */
+        .game-title { position: relative; z-index: 2; font-weight: 900; font-size: 18px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); line-height: 1.2; }
+        .game-title span { display: block; color: #ffcc00; font-size: 14px; }
+
+        /* MODAL VE SLOT ALANI */
+        .game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-content { background: #11151f; border: 2px solid #ffcc00; border-radius: 15px; width: 850px; max-width: 95%; padding: 30px; position: relative; display: flex; gap: 30px; box-shadow: 0 0 50px rgba(255,204,0,0.2); }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: #ff4d4d; font-size: 28px; font-weight: bold; cursor: pointer; }
+        
+        .slot-container { flex: 2; display: flex; flex-direction: column; align-items: center; background: #0b0e14; padding: 20px; border-radius: 12px; border: 1px solid #2d3748; }
+        .slot-machine { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #1a202c; padding: 15px; border-radius: 10px; border: 2px solid #ffcc00; margin-bottom: 20px; }
+        
+        /* Slot Makaralarındaki Resimler */
+        .reel { width: 90px; height: 90px; background: #fff; border-radius: 8px; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); transition: transform 0.1s; }
+        .reel img { width: 70%; height: 70%; object-fit: contain; }
+
+        .controls { display: flex; flex-direction: column; gap: 15px; width: 100%; align-items: center; }
+        .bet-control { display: flex; gap: 10px; align-items: center; }
+        .bet-control button { background: #2d3748; color: #fff; border: none; width: 35px; height: 35px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 18px; }
+        .bet-display { background: #1a202c; padding: 5px 20px; border-radius: 5px; border: 1px solid #4a5568; font-weight: bold; font-size: 18px; }
+        .spin-btn { background: linear-gradient(135deg, #ffcc00, #ff8c00); color: #000; border: none; padding: 15px 50px; font-size: 22px; font-weight: 900; border-radius: 10px; cursor: pointer; width: 100%; letter-spacing: 2px; transition: 0.2s; }
+        .spin-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,204,0,0.5); }
+
+        /* SAĞ PANEL */
+        .live-wins { width: 320px; background: #11151f; border-radius: 12px; border: 1px solid #2d3748; padding: 20px; display: flex; flex-direction: column; }
+        .live-wins h3 { font-size: 16px; border-bottom: 1px solid #2d3748; padding-bottom: 10px; margin-bottom: 15px; color: #a0aec0; }
+        .bets-list { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; max-height: 400px; }
+        .bet-item { display: flex; justify-content: space-between; background: #1a202c; padding: 10px; border-radius: 8px; font-size: 13px; animation: fadeIn 0.3s; }
+        .bet-user { font-weight: bold; color: #e2e8f0; }
+        .bet-game { color: #718096; font-size: 11px; margin-top: 3px; }
+        .bet-amount { color: #ffcc00; font-weight: bold; }
+        .bet-win { color: #00e676; font-weight: bold; }
+        .bet-lose { color: #ff4d4d; font-weight: bold; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .warning-text { text-align: center; color: #ff4d4d; font-size: 12px; margin-top: 20px; font-weight: bold; opacity: 0.8; }
+
+        @media (max-width: 1024px) {
+            .modal-content { flex-direction: column; }
+            .live-wins { width: 100%; }
+            .reel { width: 70px; height: 70px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="logo">🔥 <span>İSYANKAR</span> BET</div>
+        <div class="user-panel">
+            <div class="balance-box">Bakiye: <span class="balance-amount" id="mainBalance">10.000</span> Jeton</div>
+            <button class="btn-deposit">Jeton Al</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <a class="menu-item active">🔥 Popüler Oyunlar</a>
+            <a class="menu-item">🎰 Slot Oyunları</a>
+            <a class="menu-item">🃏 Rulet & Kart</a>
+        </aside>
+
+        <main class="content">
+            <h2>Popüler Oyunlar</h2>
+            
+            <div class="games-grid">
+                <!-- Sweet Bonanza -->
+                <div class="game-card" onclick="openGame()">
+                    <div class="game-cover" style="background-image: url('https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=600&auto=format&fit=crop');">
+                        <div class="game-title">SWEET<br><span>BONANZA</span></div>
+                    </div>
+                </div>
+                <!-- Gates of Olympus -->
+                <div class="game-card" onclick="openGame()">
+                    <div class="game-cover" style="background-image: url('https://images.unsplash.com/photo-1533973860715-430d3aeb7536?q=80&w=600&auto=format&fit=crop');">
+                        <div class="game-title">GATES OF<br><span>OLYMPUS</span></div>
+                    </div>
+                </div>
+                <!-- Big Bass -->
+                <div class="game-card" onclick="openGame()">
+                    <div class="game-cover" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=600&auto=format&fit=crop');">
+                        <div class="game-title">BIG BASS<br><span>BONANZA</span></div>
+                    </div>
+                </div>
+                <!-- Sugar Rush -->
+                <div class="game-card" onclick="openGame()">
+                    <div class="game-cover" style="background-image: url('https://images.unsplash.com/photo-1581798459219-318e76aecc7b?q=80&w=600&auto=format&fit=crop');">
+                        <div class="game-title">SUGAR<br><span>RUSH</span></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- OYUN MODALI -->
+    <div class="game-modal" id="gameModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeGame()">×</span>
+            
+            <div class="slot-container">
+                <h3 style="color:#ffcc00; margin-bottom: 15px;">Slot Simülasyonu</h3>
+                <div class="slot-machine">
+                    <!-- Resimli Slot Makaraları -->
+                    <div class="reel" id="r1"><img src="https://cdn-icons-png.flaticon.com/512/590/590688.png"></div>
+                    <div class="reel" id="r2"><img src="https://cdn-icons-png.flaticon.com/512/590/590728.png"></div>
+                    <div class="reel" id="r3"><img src="https://cdn-icons-png.flaticon.com/512/590/590750.png"></div>
+                    <div class="reel" id="r4"><img src="https://cdn-icons-png.flaticon.com/512/616/616494.png"></div>
+                    <div class="reel" id="r5"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png"></div>
+                    <div class="reel" id="r6"><img src="https://cdn-icons-png.flaticon.com/512/590/590772.png"></div>
+                    <div class="reel" id="r7"><img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png"></div>
+                    <div class="reel" id="r8"><img src="https://cdn-icons-png.flaticon.com/512/590/590688.png"></div>
+                    <div class="reel" id="r9"><img src="https://cdn-icons-png.flaticon.com/512/590/590728.png"></div>
+                </div>
+                <div class="controls">
+                    <div class="bet-control">
+                        <button onclick="changeBet(-50)">-</button>
+                        <div class="bet-display" id="modalBet">100</div>
+                        <button onclick="changeBet(50)">+</button>
+                    </div>
+                    <button class="spin-btn" onclick="spin()">ÇEVİR</button>
+                </div>
+            </div>
+
+            <div class="live-wins">
+                <h3>Canlı Kazançlar (Demo)</h3>
+                <div class="bets-list" id="liveBetsModal"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-text">
+        ⚠️ Bu platform tamamen bir simülasyondur. Gerçek para ile oynanmaz, para kazandırmaz. Sadece eğlence amaçlı demo sürümüdür.
+    </div>
+
+    <script>
+        let mainBalance = 10000;
+        let currentBet = 100;
+        let isSpinning = false;
+
+        // Görsel İkonlar (Slot için)
+        const symbolImages = [
+            'https://cdn-icons-png.flaticon.com/512/590/590688.png', // Kiraz
+            'https://cdn-icons-png.flaticon.com/512/590/590728.png', // Limon
+            'https://cdn-icons-png.flaticon.com/512/590/590750.png', // Üzüm
+            'https://cdn-icons-png.flaticon.com/512/616/616494.png', // Elmas
+            'https://cdn-icons-png.flaticon.com/512/1828/1828884.png',// Yıldız
+            'https://cdn-icons-png.flaticon.com/512/590/590772.png', // Zil
+            'https://cdn-icons-png.flaticon.com/512/2921/2921222.png' // 7
+        ];
+
+        function updateMainBalance() {
+            document.getElementById('mainBalance').innerText = mainBalance.toLocaleString('tr-TR');
+        }
+
+        function openGame() {
+            document.getElementById('gameModal').style.display = 'flex';
+            startLiveBets();
+        }
+
+        function closeGame() {
+            document.getElementById('gameModal').style.display = 'none';
+        }
+
+        function changeBet(amount) {
+            if (isSpinning) return;
+            if (currentBet + amount >= 10 && currentBet + amount <= 5000) {
+                currentBet += amount;
+                document.getElementById('modalBet').innerText = currentBet;
+            }
+        }
+
+        function getRandomImage() {
+            return symbolImages[Math.floor(Math.random() * symbolImages.length)];
+        }
+
+        function spin() {
+            if (isSpinning) return;
+            if (mainBalance < currentBet) {
+                alert("Yetersiz bakiye!");
+                return;
+            }
+
+            isSpinning = true;
+            mainBalance -= currentBet;
+            updateMainBalance();
+
+            const reels = document.querySelectorAll('.reel');
+            
+            // Hızlı dönüş animasyonu
+            let spinInterval = setInterval(() => {
+                reels.forEach(reel => { 
+                    reel.innerHTML = `<img src="${getRandomImage()}">`; 
+                });
+            }, 50);
+
+            setTimeout(() => {
+                clearInterval(spinInterval);
+                const finalImages = [];
+                
+                reels.forEach(reel => {
+                    const img = getRandomImage();
+                    reel.innerHTML = `<img src="${img}">`;
+                    finalImages.push(img);
+                });
+
+                checkWin(finalImages);
+                isSpinning = false;
+            }, 2000);
+        }
+
+        function checkWin(arr) {
+            let winAmount = 0;
+            const rows = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+
+            rows.forEach(row => {
+                if (arr[row[0]] === arr[row[1]] && arr[row[1]] === arr[row[2]]) {
+                    // 7 resmi (index 6) gelirse 20x, Elmas (index 3) gelirse 10x
+                    let mult = 5;
+                    if (arr[row[0]] === symbolImages[6]) mult = 20;
+                    if (arr[row[0]] === symbolImages[3]) mult = 10;
+                    winAmount += (currentBet * mult);
+                }
+            });
+
+            if (winAmount > 0) {
+                setTimeout(() => {
+                    mainBalance += winAmount;
+                    updateMainBalance();
+                    addBetToModal("Sen", currentBet, winAmount);
+                }, 300);
+            } else {
+                addBetToModal("Sen", currentBet, -currentBet);
+            }
+        }
+
+        let liveBetsInterval;
+        const fakeUsers = ["m***2", "a***8", "b***7", "t***5", "h***5", "Gizlenmiş", "d***1", "k***1"];
+        const fakeGames = ["Sweet Bonanza", "Gates of Olympus", "Big Bass", "Sugar Rush", "Starlight"];
+
+        function startLiveBets() {
+            const container = document.getElementById('liveBetsModal');
+            container.innerHTML = '';
+            for(let i=0; i<4; i++) { generateFakeBet(); }
+            clearInterval(liveBetsInterval);
+            liveBetsInterval = setInterval(generateFakeBet, 2500);
+        }
+
+        function generateFakeBet() {
+            const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+            const game = fakeGames[Math.floor(Math.random() * fakeGames.length)];
+            const bet = Math.floor(Math.random() * 20) * 100 + 100;
+            let win = -bet;
+
+            if (Math.random() < 0.15) {
+                win = Math.floor(bet * (Math.random() * 8 + 2));
+                addBetToModal(user, bet, win, game);
+            } else {
+                addBetToModal(user, bet, win, game);
+            }
+        }
+
+        function addBetToModal(user, bet, win, gameName = "Slot Oyunu") {
+            const container = document.getElementById('liveBetsModal');
+            const item = document.createElement('div');
+            item.className = 'bet-item';
+
+            const winClass = win > 0 ? 'bet-win' : 'bet-lose';
+            const winText = win > 0 ? `+${win.toLocaleString('tr-TR')}` : `${win.toLocaleString('tr-TR')}`;
+
+            item.innerHTML = `
+                <div>
+                    <div class="bet-user">${user}</div>
+                    <div class="bet-game">${gameName}</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="bet-amount">${bet} Jeton</div>
+                    <div class="${winClass}">${winText}</div>
+                </div>
+            `;
+            
+            container.prepend(item);
+            if (container.children.length > 20) { container.removeChild(container.lastChild); }
+        }
+
+        updateMainBalance();
+    </script>
+</body>
+</html>
