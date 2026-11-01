@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>İSYANKAR BET - Resmi Casino Platformu</title>
+  <title>İSYANKAR BET - Casino Platformu</title>
   <style>
     :root {
       --gold: #ffd700;
-      --gold-dark: #b8860b;
       --gold-glow: #ffae00;
       --neon-purple: #9d4edd;
       --neon-light: #c77dff;
@@ -66,17 +65,13 @@
       text-shadow: 0 0 20px var(--gold-glow);
     }
 
-    .search-bar {
-      position: relative; width: 350px;
-    }
+    .search-bar { position: relative; width: 350px; }
     .search-bar input {
       width: 100%; padding: 10px 20px; border-radius: 25px;
       background: rgba(255, 255, 255, 0.08); border: 1px solid var(--neon-purple);
       color: #fff; outline: none; transition: 0.3s;
     }
-    .search-bar input:focus {
-      border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow);
-    }
+    .search-bar input:focus { border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); }
 
     .user-actions { display: flex; align-items: center; gap: 15px; }
     .balance-box {
@@ -157,14 +152,10 @@
       display: flex; align-items: flex-end; justify-content: center; padding: 10px;
       position: relative;
     }
-    .cover-gates { background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8)), #4a1259; }
-    .cover-sweet { background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8)), #800f2f; }
-    .cover-bass { background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8)), #0077b6; }
-    .cover-sugar { background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8)), #7209b7; }
     
     .game-title-text {
       font-size: 18px; font-weight: 900; color: #fff; text-shadow: 0 0 8px #000;
-      text-align: center;
+      text-align: center; background: rgba(0,0,0,0.6); width: 100%; padding: 4px; border-radius: 4px;
     }
     .game-card-footer {
       padding: 12px; display: flex; justify-content: space-between; align-items: center;
@@ -265,7 +256,7 @@
       <div class="section-title">⭐ Popüler Oyunlar</div>
       <div class="grid-games" id="gamesGrid">
         <div class="game-card" data-name="Gates of Olympus">
-          <div class="game-cover cover-gates">
+          <div class="game-cover" style="background-image: url('https://imgs.search.brave.com/40cvdCWsQciO48UfyrmivwQiJLQhU2ulL1GnS3adW5o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9nYXRl/c29mb2x5bXB1cy0x/MDAwLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyNC8xMC9H/YXRlcy1vZi1PbHlt/cHVzLTEwMDAtbG8u/anBn');">
             <span class="game-title-text">GATES OF OLYMPUS</span>
           </div>
           <div class="game-card-footer">
@@ -275,7 +266,7 @@
         </div>
 
         <div class="game-card" data-name="Sweet Bonanza">
-          <div class="game-cover cover-sweet">
+          <div class="game-cover" style="background-image: url('https://imgs.search.brave.com/KB01Tizp_cLMOQLdELMhzMq1DLn03nDWcV-fsugIhDo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc2xvdHNsYXVu/Y2guY29tLzIzNzM1/L3N3ZWV0LWJvbmFu/emEtMTAwMC5qcGc');">
             <span class="game-title-text">SWEET BONANZA</span>
           </div>
           <div class="game-card-footer">
@@ -285,7 +276,7 @@
         </div>
 
         <div class="game-card" data-name="Big Bass Bonanza">
-          <div class="game-cover cover-bass">
+          <div class="game-cover" style="background-image: url('https://imgs.search.brave.com/QuV4jrlyDTUxlKOqkI1wc7nbvWXT7I8iteREa8uPncY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bmV0YmV0Lm9yZy9j/YXNpbm9zLWVuLXBl/cnUvd3AtY29udGVu/dC91cGxvYWRzLzIw/MjMvMDUvNDAwMzAw/YmlnYmFzc2JvbmFu/emEuanBn');">
             <span class="game-title-text">BIG BASS BONANZA</span>
           </div>
           <div class="game-card-footer">
@@ -295,7 +286,7 @@
         </div>
 
         <div class="game-card" data-name="Sugar Rush">
-          <div class="game-cover cover-sugar">
+          <div class="game-cover" style="background-image: url('https://imgs.search.brave.com/tCIbWwOhNASoESfpKeONMGS5RkBV_H9zJko_kdR2ACU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9sYWJl/bC5iZXQvd3AtY29udGVu/dC91cGxvYWRzL2xh/YmVsLWJldC1zdWdh/ci1ydXNoLTAwMi53ZWJw');">
             <span class="game-title-text">SUGAR RUSH</span>
           </div>
           <div class="game-card-footer">
@@ -384,19 +375,28 @@
     const canvas = document.getElementById('slotCanvas');
     const ctx = canvas.getContext('2d');
 
-    const slotAssets = {
-      'Gates of Olympus': ['⚡', '👑', '💍', '🏆', '💎', '🔴'],
-      'Sweet Bonanza': ['🍭', '🍬', '🍇', '🍉', '🍌', '🍎'],
-      'Big Bass Bonanza': ['🐟', '🎣', '⚓', '🛟', '📦', '🌊'],
-      'Sugar Rush': ['🐻', '🌟', 'Heart', '🍬', '🔮', '🍩']
+    const loadedImages = {};
+    const gameImageUrls = {
+      'Gates of Olympus': 'https://imgs.search.brave.com/40cvdCWsQciO48UfyrmivwQiJLQhU2ulL1GnS3adW5o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9nYXRl/c29mb2x5bXB1cy0x/MDAwLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyNC8xMC9H/YXRlcy1vZi1PbHlt/cHVzLTEwMDAtbG8u/anBn',
+      'Sweet Bonanza': 'https://imgs.search.brave.com/KB01Tizp_cLMOQLdELMhzMq1DLn03nDWcV-fsugIhDo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc2xvdHNsYXVu/Y2guY29tLzIzNzM1/L3N3ZWV0LWJvbmFu/emEtMTAwMC5qcGc',
+      'Big Bass Bonanza': 'https://imgs.search.brave.com/QuV4jrlyDTUxlKOqkI1wc7nbvWXT7I8iteREa8uPncY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bmV0YmV0Lm9yZy9j/YXNpbm9zLWVuLXBl/cnUvd3AtY29udGVu/dC91cGxvYWRzLzIw/MjMvMDUvNDAwMzAw/YmlnYmFzc2JvbmFu/emEuanBn',
+      'Sugar Rush': 'https://imgs.search.brave.com/tCIbWwOhNASoESfpKeONMGS5RkBV_H9zJko_kdR2ACU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9sYWJl/bC5iZXQvd3AtY29udGVu/dC91cGxvYWRzL2xh/YmVsLWJldC1zdWdh/ci1ydXNoLTAwMi53ZWJw'
     };
 
-    let reelGrid = Array(6).fill(null).map(() => Array(5).fill('💎'));
+    Object.keys(gameImageUrls).forEach(key => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = gameImageUrls[key];
+      loadedImages[key] = img;
+    });
+
+    let reelGrid = Array(6).fill(null).map(() => Array(5).fill(0));
 
     function renderCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const colWidth = canvas.width / 6;
       const rowHeight = canvas.height / 5;
+      const currentImg = loadedImages[activeGame];
 
       for (let c = 0; c < 6; c++) {
         for (let r = 0; r < 5; r++) {
@@ -405,11 +405,18 @@
           ctx.strokeStyle = '#9d4edd';
           ctx.strokeRect(c * colWidth + 2, r * rowHeight + 2, colWidth - 4, rowHeight - 4);
 
-          ctx.font = '32px Arial';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillStyle = '#ffd700';
-          ctx.fillText(reelGrid[c][r], c * colWidth + colWidth / 2, r * rowHeight + rowHeight / 2);
+          if (currentImg && currentImg.complete) {
+            const shiftX = (reelGrid[c][r] % 3) * (currentImg.width / 3);
+            const shiftY = Math.floor(reelGrid[c][r] / 3) * (currentImg.height / 3);
+            ctx.drawImage(
+              currentImg,
+              shiftX, shiftY, currentImg.width / 3, currentImg.height / 3,
+              c * colWidth + 4, r * rowHeight + 4, colWidth - 8, rowHeight - 8
+            );
+          } else {
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(c * colWidth + 10, r * rowHeight + 10, colWidth - 20, rowHeight - 20);
+          }
         }
       }
     }
@@ -417,8 +424,7 @@
     function startSlot(gameName) {
       activeGame = gameName;
       document.getElementById('currentSlotTitle').innerText = gameName;
-      const symbols = slotAssets[gameName] || slotAssets['Gates of Olympus'];
-      reelGrid = reelGrid.map(col => col.map(() => symbols[Math.floor(Math.random() * symbols.length)]));
+      reelGrid = reelGrid.map(col => col.map(() => Math.floor(Math.random() * 9)));
       openModal('slotModal');
       renderCanvas();
     }
@@ -429,10 +435,9 @@
       userBalance -= currentBet;
       updateBalanceDisplay();
 
-      const symbols = slotAssets[activeGame] || slotAssets['Gates of Olympus'];
       let ticks = 0;
       const timer = setInterval(() => {
-        reelGrid = reelGrid.map(col => col.map(() => symbols[Math.floor(Math.random() * symbols.length)]));
+        reelGrid = reelGrid.map(col => col.map(() => Math.floor(Math.random() * 9)));
         renderCanvas();
         ticks++;
         if (ticks > 12) {
